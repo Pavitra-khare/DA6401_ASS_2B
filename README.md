@@ -26,27 +26,29 @@ Here we are implementing a CNN model on the iNaturalist dataset from scratch and
 
 
 
-##  Project File Overview
-
-| **File**       | **Purpose**                                                                 | **Key Functions / Components**                                                                 |
-|----------------|------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------|
-| `run.py`       | Main script to run training & evaluation.                                   | `main()` – Sets up wandb, loads model & data, runs training, logs results.                    |
-| `config.py`    | Handles CLI args, device setup, wandb login.                                | Arg parser, device config, `wandb.login()` with API key.                                      |
-| `sweep.py`     | Defines hyperparameter sweep settings.                                      | `sweep_config` – Grid search over model strategies, epochs; sets `val_accuracy` metric.       |
-| `model.py`     | Loads model & applies transfer learning strategies.                         | `pretrain_model()` – Loads ResNet50, modifies FC, applies one of four freezing strategies.     |
-| `data_load.py` | Loads and augments train/val/test data.                                     | `get_transform()`, `data_load()`, `test_data_load()` – Handles dataset splits and transforms. |
-| `train.py`     | Training, validation, testing logic with early stopping and wandb logging.  | `train_on_train_data()`, `test_on_valid_data()`, `model_train()`                              |
 
 
-## File Dependency Map
+## Functions structure
 
 <pre> 
-run.py
-├── config.py        # Parses command-line arguments, sets device, logs into W&B  
-├── data_load.py     # Loads and augments train, validation, and test datasets  
-├── model.py         # Defines CNN model architectures  
-├── train.py         # Contains training, validation, testing, and early stopping logic  
-└── sweep.py         # (Optional) Contains W&B hyperparameter sweep configurations 
+## Single-File Implementation (trainB.py)
+
+### Core Function Breakdown
+
+| **Function**                | **Purpose**                                                                 | **Key Parameters**                          | **Returns**                              |
+|-----------------------------|-----------------------------------------------------------------------------|---------------------------------------------|------------------------------------------|
+| `get_sweep_config()`         | Configures W&B hyperparameter search strategies                             | -                                           | Dictionary of sweep parameters           |
+| `parse_and_setup()`          | Parses CLI arguments & initializes hardware/W&B                             | `--wandb_project`, `--wandb_entity`, etc.   | (args, device) tuple                     |
+| `get_transform(augment)`     | Creates image transformation pipelines                                      | `augment`: Yes/No for augmentation         | `transforms.Compose` object              |
+| `loadTheData(data_dir, ...)` | Loads training/validation data with split                                   | `data_dir`: Dataset path                    | (train_loader, val_loader) tuple         |
+| `modelStratPretrain(...)`     | Initializes ResNet50 with transfer learning strategies                      | `strategy`: Freezing approach               | Configured PyTorch model                 |
+| `trainDataTraining()`        | Executes one training epoch                                                 | `model`, `train_loader`, `device`           | Updated model, loss, accuracy            |
+| `validDataTesting()`         | Evaluates model on validation/test data                                     | `model`, `test_data`, `device`              | Accuracy percentage                      |
+| `trainCnnModel()`            | Orchestrates full training loop with early stopping                         | `model`, train/val/test data, `epochs`      | Final trained model                      |
+
+---
+
+
 </pre>
 
 ---
@@ -78,42 +80,11 @@ run.py
 ```bash
 pip install torch torchvision scikit-learn wandb
 ```
-### 2.Run the file run.py
+### 2.Run the file trainB.py
 ```bash
-python run.py --wandb_project <project_name> --wandb_entity <entity_name> --dpTrain <train_data_path> --dpTest <test_data_path>
+python trainB.py --wandb_project <project_name> --wandb_entity <entity_name> --dpTrain <train_data_path> --dpTest <test_data_path>
 ```
 
 ### Note:- 
 GPU enabled enviroment Needed
-
-## Steps to Run on Kaggle
-
-### 1. Upload Python Files  
-- Open your Kaggle Notebook.  
-- Click on the **"Upload"** button in the file browser pane.  
-- Upload the following Python files:  
-  - `run.py`  
-  - `config.py`  
-  - `model.py`  
-  - `train.py`  
-  - `data_load.py`  
-  - `sweep.py`  
-- After uploading, click **"Add to notebook"** when prompted.
-
----
-
-### 2. Upload Dataset  
-- Go to the **"Add data"** section on the right-hand panel.  
-- Click **"Upload"** and choose your dataset folder from local.  
-- Rename the uploaded dataset as **`my_dataset`**.  
-- Click **"Add to notebook"** after uploading.
-
----
-
-### 3. Run the Script  
-Use the following command in a code cell to run the main training script with arguments:
-
-```bash
-python run.py --wandb_project <project_name> --wandb_entity <entity_name> --dpTrain <train_data_path> --dpTest <test_data_path>
-```
 
