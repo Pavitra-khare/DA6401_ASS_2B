@@ -5,7 +5,7 @@ I used kaggle for this assignment. First create a kaggle account and go to the c
 Here we are implementing a CNN model on the iNaturalist dataset from scratch and tuned the hyperparameters to achieve optimal performance. I utilized Python along with required packages from PyTorch and Torchvision.
 
 [GitHub Repository](https://github.com/Pavitra-khare/DA6401_ASS_2B/tree/main)  
-[Weights & Biases Report](https://api.wandb.ai/links/3628-pavitrakhare-indian-institute-of-technology-madras/m5cmjze4)
+[Weights & Biases Report](https://api.wandb.ai/links/3628-pavitrakhare-indian-institute-of-technology-madras/lods8pjm)
 
 ## PART B
 
