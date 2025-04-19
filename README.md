@@ -70,6 +70,8 @@ Here we are implementing a CNN model on the iNaturalist dataset from scratch and
 | `-key/--wandb_key` | [hidden] | W&B API authentication key |
 | `-dpTrain/--dpTrain` | /kaggle/input/my-dataset/inaturalist_12K/train| Training dataset path |
 | `-dpTest/--dpTest` | /kaggle/input/my-dataset/inaturalist_12K/val | Test dataset path |
+| `-ep/--epoch` | 10 | number of Epochs you want to run |
+
 
 ---
 
